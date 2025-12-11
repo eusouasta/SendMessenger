@@ -1,5 +1,5 @@
 
-import { ArrowRight, CheckCircle, MessageCircle, Shield, Zap, Globe, Star } from 'lucide-react';
+import { ArrowRight, MessageCircle, Shield, Zap, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
