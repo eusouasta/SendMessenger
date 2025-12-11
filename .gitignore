@@ -1,0 +1,28 @@
+# Node
+node_modules/
+dist/
+build/
+release/
+.env
+
+# Logs & History (Privacy)
+*.log
+npm-debug.log*
+history.json
+debug.log
+
+# Supabase Admin Worker (Optional exclusion for privacy)
+server/admin-worker.js
+server/license.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Electron Builder
+dist_electron/
