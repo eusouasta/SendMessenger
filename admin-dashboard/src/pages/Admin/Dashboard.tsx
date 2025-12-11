@@ -201,7 +201,7 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
         setTestLoading(true);
         try {
             const payload = {
-                source: 'simulator', // Identify as internal simulator
+                source: 'simulator',
                 event: 'purchase_approved',
                 email: testEmail,
                 status: 'paid',
@@ -209,22 +209,26 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
                 timestamp: new Date().toISOString()
             };
 
-            const { error } = await supabase.from('webhook_logs').insert([{
-                payload: payload,
-                source: 'simulator',
-                status: 'pending' // pending for server to pick up
-            }]);
+            // Call Vercel Serverless Function
+            const response = await fetch('/api/webhook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
 
-            if (!error) {
-                alert('Simulação enviada! O servidor deve processar em breve.');
-                // Wait a bit for server to process before refreshing logs
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Simulação enviada! Resposta da API: ' + (data.message || 'OK'));
                 setTimeout(fetchWebhooks, 2000);
             } else {
-                alert('Erro ao salvar simulação: ' + error.message);
+                alert('Erro na API: ' + (data.error || 'Erro desconhecido'));
             }
         } catch (error) {
             console.error(error);
-            alert('Erro inesperado.');
+            alert('Erro ao conectar com API de Webhook (Verifique se está na Vercel).');
         }
         setTestLoading(false);
     };
@@ -355,7 +359,7 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
                                         <ExternalLink size={16} />
                                     </button>
                                     <p className="text-xs text-gray-500 mt-2 text-center">
-                                        Isso envia um POST para <code>localhost:3001/api/webhook</code> e cria uma licença real se não existir.
+                                        Envia POST para <code>/api/webhook</code> (Vercel Function) e cria licença.
                                     </p>
                                 </div>
                             </div>
