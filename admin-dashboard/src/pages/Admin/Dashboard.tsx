@@ -50,6 +50,8 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
     const [uploading, setUploading] = useState(false);
     const [uploadVersion, setUploadVersion] = useState('');
     const [uploadFile, setUploadFile] = useState<File | null>(null);
+    const [useExternalLink, setUseExternalLink] = useState(false);
+    const [externalLink, setExternalLink] = useState('');
 
     // Webhook Test State
     const [testLoading, setTestLoading] = useState(false);
@@ -121,27 +123,40 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
 
     const handleUpload = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!uploadFile || !uploadVersion) return;
+
+        let pathOrUrl = '';
+        let fileNameToSave = '';
+
         setUploading(true);
 
-        const fileName = `${Date.now()}_${uploadFile.name}`;
+        if (useExternalLink) {
+            if (!externalLink) { alert('Informe o link!'); setUploading(false); return; }
+            pathOrUrl = externalLink;
+            fileNameToSave = 'Link Externo';
+        } else {
+            if (!uploadFile) { alert('Selecione um arquivo!'); setUploading(false); return; }
 
-        // 1. Upload to Storage
-        const { error: storageError } = await supabase.storage
-            .from('installers')
-            .upload(fileName, uploadFile);
+            const fileName = `${Date.now()}_${uploadFile.name}`;
+            fileNameToSave = uploadFile.name;
 
-        if (storageError) {
-            alert('Erro no Upload: ' + storageError.message);
-            setUploading(false);
-            return;
+            // 1. Upload to Storage
+            const { error: storageError } = await supabase.storage
+                .from('installers')
+                .upload(fileName, uploadFile);
+
+            if (storageError) {
+                alert('Erro no Upload: ' + storageError.message);
+                setUploading(false);
+                return;
+            }
+            pathOrUrl = fileName;
         }
 
         // 2. Insert Record
         const { error: dbError } = await supabase.from('app_versions').insert({
             version: uploadVersion,
-            filename: uploadFile.name,
-            storage_path: fileName,
+            filename: fileNameToSave,
+            storage_path: pathOrUrl,
             active: true
         });
 
@@ -151,6 +166,8 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
             alert('Upload Concluído!');
             setUploadFile(null);
             setUploadVersion('');
+            setExternalLink('');
+            setUseExternalLink(false);
             fetchVersions();
         }
         setUploading(false);
@@ -408,13 +425,36 @@ export default function AdminDashboard({ onLogout }: { session: any | null, onLo
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs uppercase font-bold text-gray-500 mb-1">Arquivo (.exe/.zip)</label>
-                                        <input
-                                            type="file"
-                                            onChange={e => setUploadFile(e.target.files ? e.target.files[0] : null)}
-                                            className="w-full bg-black border border-white/10 rounded-lg px-4 py-2 text-sm text-gray-400 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:bg-blue-600 file:text-white"
-                                            required
-                                        />
+                                        <div className="flex justify-between mb-1">
+                                            <label className="block text-xs uppercase font-bold text-gray-500">Arquivo (.exe/.zip)</label>
+                                            <label className="flex items-center gap-1 text-xs text-blue-400 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={useExternalLink}
+                                                    onChange={e => setUseExternalLink(e.target.checked)}
+                                                    className="w-3 h-3"
+                                                />
+                                                Usar Link Externo?
+                                            </label>
+                                        </div>
+
+                                        {useExternalLink ? (
+                                            <input
+                                                type="url"
+                                                placeholder="https://drive.google.com/..."
+                                                value={externalLink}
+                                                onChange={e => setExternalLink(e.target.value)}
+                                                className="w-full bg-black border border-white/10 rounded-lg px-4 py-2 text-white"
+                                                required
+                                            />
+                                        ) : (
+                                            <input
+                                                type="file"
+                                                onChange={e => setUploadFile(e.target.files ? e.target.files[0] : null)}
+                                                className="w-full bg-black border border-white/10 rounded-lg px-4 py-2 text-sm text-gray-400 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:bg-blue-600 file:text-white"
+                                                required={!useExternalLink}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                                 <button disabled={uploading} type="submit" className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-bold w-full disabled:opacity-50">

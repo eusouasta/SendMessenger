@@ -47,8 +47,12 @@ export default function ClientDashboard({ user, onLogout }: { user: any, onLogou
                 setLatestVersion(version);
 
                 // Get URL
-                const { data } = supabase.storage.from('installers').getPublicUrl(version.storage_path);
-                setDownloadUrl(data.publicUrl);
+                if (version.storage_path.startsWith('http')) {
+                    setDownloadUrl(version.storage_path);
+                } else {
+                    const { data } = supabase.storage.from('installers').getPublicUrl(version.storage_path);
+                    setDownloadUrl(data.publicUrl);
+                }
             }
             setLoading(false);
         };
