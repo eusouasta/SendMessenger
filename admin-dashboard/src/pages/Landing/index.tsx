@@ -10,12 +10,12 @@ export default function LandingPage() {
 
             {/* Navbar */}
             <nav className="fixed top-0 left-0 w-full z-50 bg-black/50 backdrop-blur-lg border-b border-white/5">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                            <MessageCircle className="text-white" size={24} />
+                        <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <MessageCircle className="text-white" size={20} />
                         </div>
-                        <span className="font-bold text-xl tracking-tight">SendMessenger <span className="text-blue-500">Pro</span></span>
+                        <span className="font-bold text-lg md:text-xl tracking-tight hidden xs:block">SendMessenger <span className="text-blue-500">Pro</span></span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
@@ -24,12 +24,12 @@ export default function LandingPage() {
                         <a href="#pricing" className="hover:text-white transition-colors">Preços</a>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 md:gap-4">
                         <button
                             onClick={() => navigate('/auth')}
-                            className="text-gray-300 hover:text-white font-medium text-sm transition-colors"
+                            className="text-gray-300 hover:text-white font-medium text-xs md:text-sm transition-colors whitespace-nowrap"
                         >
-                            Área do Cliente
+                            Login
                         </button>
                         <button
                             onClick={() => window.open('https://pay.cakto.com.br/3dwbqws_683628', '_blank')}
