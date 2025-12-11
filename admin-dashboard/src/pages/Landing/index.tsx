@@ -15,7 +15,7 @@ export default function LandingPage() {
                         <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                             <MessageCircle className="text-white" size={20} />
                         </div>
-                        <span className="font-bold text-lg md:text-xl tracking-tight hidden xs:block">SendMessenger <span className="text-blue-500">Pro</span></span>
+                        <span className="font-bold text-lg md:text-xl tracking-tight hidden sm:block">SendMessenger <span className="text-blue-500">Pro</span></span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
