@@ -32,8 +32,8 @@ export default function LandingPage() {
                             Área do Cliente
                         </button>
                         <button
-                            onClick={() => window.open('https://pay.cakto.com.br/EXAMPLE', '_blank')}
-                            className="bg-white hover:bg-gray-100 text-black px-5 py-2.5 rounded-full text-sm font-bold transition-transform active:scale-95 shadow-lg shadow-white/10"
+                            onClick={() => window.open('https://pay.cakto.com.br/3dwbqws_683628', '_blank')}
+                            className="bg-white hover:bg-gray-100 text-black px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-transform active:scale-95 shadow-lg shadow-white/10"
                         >
                             Comprar Agora
                         </button>
