@@ -1,2 +1,3 @@
-2025/12/10-20:01:37.006 496c Creating DB E:\SendMessenger\server\session\Default\Session Storage since it was missing.
-2025/12/10-20:01:37.066 496c Reusing MANIFEST E:\SendMessenger\server\session\Default\Session Storage/MANIFEST-000001
+2025/12/10-22:03:45.423 4844 Reusing MANIFEST E:\SendMessenger\server\session\Default\Session Storage/MANIFEST-000001
+2025/12/10-22:03:45.423 4844 Recovering log #3
+2025/12/10-22:03:45.423 4844 Reusing old log E:\SendMessenger\server\session\Default\Session Storage/000003.log 
