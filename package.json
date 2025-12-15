@@ -1,6 +1,6 @@
 {
     "name": "send-messenger-pro",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "WhatsApp Mass Messenger",
     "main": "main.js",
     "scripts": {
@@ -8,7 +8,7 @@
         "prebuild": "cd client && npm run build",
         "build": "npm run prebuild && electron-builder",
         "build:dir": "npm run prebuild && electron-builder --dir",
-        "dist": "npm run clean && electron-builder",
+        "dist": "npm run prebuild && npm run clean && electron-builder",
         "clean": "if exist release rd /s /q release",
         "install-all": "npm install"
     },

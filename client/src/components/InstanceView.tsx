@@ -440,8 +440,8 @@ export default function InstanceView({ instanceId }: InstanceViewProps) {
                 ))}
 
                 <div className="mt-auto">
-                    {connectedUser && (
-                        <button onClick={handleLogout} className="w-12 h-12 rounded-xl bg-red-900/20 text-red-400 flex items-center justify-center hover:bg-red-900/40" title="Sair">
+                    {(connectedUser || ready || authenticated) && (
+                        <button onClick={handleLogout} className="w-12 h-12 rounded-xl bg-red-900/20 text-red-400 flex items-center justify-center hover:bg-red-900/40" title="Sair / Desconectar">
                             <LogOut size={20} />
                         </button>
                     )}
