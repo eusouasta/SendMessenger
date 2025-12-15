@@ -26,6 +26,7 @@ import {
 // Types
 interface Log {
     type: 'success' | 'error' | 'info' | 'done';
+    status?: string;
     number?: string;
     message: string;
     timestamp: string;
@@ -717,7 +718,7 @@ export default function InstanceView({ instanceId }: InstanceViewProps) {
                             <div className="space-y-2">
                                 {history.slice().reverse().map((item, i) => (
                                     <div key={i} className="flex items-center gap-4 p-4 bg-[#1C1C1E] rounded-xl border border-white/5">
-                                        {item.type === 'success' ? <CheckCircle className="text-green-500 shrink-0" /> : <AlertCircle className="text-red-500 shrink-0" />}
+                                        {item.status === 'success' || item.type === 'success' ? <CheckCircle className="text-green-500 shrink-0" /> : <AlertCircle className="text-red-500 shrink-0" />}
                                         <div className="flex-1">
                                             <div className="font-mono text-base text-white">{item.number || 'Sistema'}</div>
                                             <div className="text-sm text-gray-500">{item.message}</div>

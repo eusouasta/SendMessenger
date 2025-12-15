@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baixar SendMessenger Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-white flex items-center justify-center h-screen">
+
+    <div class="text-center p-8 bg-slate-800 rounded-xl shadow-2xl max-w-md w-full">
+        <div class="mb-6">
+            <img src="https://placehold.co/100x100?text=Logo" alt="Logo" class="mx-auto rounded-full w-24 h-24 mb-4">
+            <h1 class="text-3xl font-bold text-emerald-400">SendMessenger Pro</h1>
+            <p class="text-slate-400 mt-2">A ferramenta definitiva para disparos em massa.</p>
+        </div>
+
+        <div id="loading" class="animate-pulse text-emerald-500 mb-4">
+            Buscando versão mais recente...
+        </div>
+
+        <div id="download-area" class="hidden">
+            <p class="text-sm text-slate-400 mb-2">Versão: <span id="version" class="text-white font-mono">...</span></p>
+            
+            <a id="download-btn" href="#" class="block w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg transition transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Baixar para Windows
+            </a>
+            
+            <p class="text-xs text-slate-500 mt-4">Compatível com Windows 10 e 11</p>
+        </div>
+
+        <div id="error" class="hidden text-red-400 mt-4">
+            Não foi possível encontrar o download. <br>
+            <a href="https://github.com/eusouasta/SendMessenger/releases/latest" class="underline text-emerald-400">Ver no GitHub</a>
+        </div>
+    </div>
+
+    <script>
+        const REPO_OWNER = 'eusouasta';
+        const REPO_NAME = 'SendMessenger';
+
+        async function getLatestRelease() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`);
+                if (!response.ok) throw new Error('Falha ao buscar release');
+                
+                const data = await response.json();
+                const exeAsset = data.assets.find(asset => asset.name.endsWith('.exe'));
+
+                if (exeAsset) {
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('download-area').classList.remove('hidden');
+                    
+                    document.getElementById('version').innerText = data.tag_name;
+                    document.getElementById('download-btn').href = exeAsset.browser_download_url;
+                } else {
+                    throw new Error('Executável não encontrado');
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        }
+
+        getLatestRelease();
+    </script>
+
+</body>
+</html>

@@ -1,5 +1,11 @@
-const { app, BrowserWindow, Tray, Menu } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron');
 const path = require('path');
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
+
+// Configure Auto Updater Logging
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
 
 // Set User Data Path for Server before requiring it
 process.env.USER_DATA_PATH = app.getPath('userData');
@@ -32,6 +38,43 @@ function createWindow() {
         win.loadURL('http://localhost:3001');
     }, 1500); // Give Express a moment to bind
 
+    // Auto Updater Events
+    autoUpdater.on('checking-for-update', () => {
+        win.webContents.send('update_status', 'Checking for update...');
+    });
+    autoUpdater.on('update-available', (info) => {
+        win.webContents.send('update_status', 'Update available.');
+    });
+    autoUpdater.on('update-not-available', (info) => {
+        win.webContents.send('update_status', 'Update not available.');
+    });
+    autoUpdater.on('error', (err) => {
+        win.webContents.send('update_status', 'Error in auto-updater. ' + err);
+    });
+    autoUpdater.on('download-progress', (progressObj) => {
+        let log_message = "Download speed: " + progressObj.bytesPerSecond;
+        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+        win.webContents.send('update_status', log_message);
+    });
+    autoUpdater.on('update-downloaded', (info) => {
+        win.webContents.send('update_status', 'Update downloaded');
+        // Optional: Ask user to restart
+        // dialog.showMessageBox({
+        //   type: 'info',
+        //   title: 'Update Ready',
+        //   message: 'Install and restart now?',
+        //   buttons: ['Yes', 'Later']
+        // }).then((buttonIndex) => {
+        //   if (buttonIndex.response === 0) autoUpdater.quitAndInstall(false, true);
+        // });
+    });
+
+    // Validar check updates once window is ready
+    win.once('ready-to-show', () => {
+        autoUpdater.checkForUpdatesAndNotify();
+    });
+
     // Prevent new windows from opening (target="_blank" fixes)
     win.webContents.setWindowOpenHandler(({ url }) => {
         return { action: 'deny' };
@@ -45,6 +88,8 @@ function createWindow() {
             return false;
         }
     });
+
+    return win;
 }
 
 app.whenReady().then(() => {
@@ -91,6 +136,16 @@ app.whenReady().then(() => {
             createWindow();
         }
     });
+});
+
+// Manual Update Check IPC
+ipcMain.on('check_for_updates', () => {
+    autoUpdater.checkForUpdates();
+});
+
+// Restart App IPC
+ipcMain.on('restart_app', () => {
+    autoUpdater.quitAndInstall();
 });
 
 // Do not quit when all windows are closed (because we might be hidden)

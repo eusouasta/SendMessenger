@@ -17,6 +17,8 @@
     "dependencies": {
         "@supabase/supabase-js": "^2.87.1",
         "cors": "^2.8.5",
+        "electron-log": "^5.4.3",
+        "electron-updater": "^6.6.2",
         "express": "^5.2.1",
         "puppeteer": "^18.2.1",
         "socket.io": "^4.8.1",
@@ -29,6 +31,11 @@
     "build": {
         "appId": "com.fer.sendmessenger",
         "productName": "SendMessenger Pro",
+        "publish": {
+            "provider": "github",
+            "owner": "eusouasta",
+            "repo": "SendMessenger"
+        },
         "icon": "build/icon.png",
         "win": {
             "target": "nsis",
@@ -62,5 +69,9 @@
             "**/node_modules/whatsapp-web.js/**/*",
             "**/node_modules/puppeteer-core/.local-chromium/**/*"
         ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/eusouasta/SendMessenger.git"
     }
 }
