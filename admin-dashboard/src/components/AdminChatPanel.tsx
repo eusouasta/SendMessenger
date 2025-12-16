@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabase';
-import { MessageCircle, Send, User, Check, Clock } from 'lucide-react';
+import { MessageCircle, Send, User, Check } from 'lucide-react';
 
 interface Chat {
     id: string;
@@ -145,8 +145,8 @@ export default function AdminChatPanel() {
                             {messages.map((msg) => (
                                 <div key={msg.id} className={`flex ${msg.sender_role === 'admin' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[70%] rounded-2xl px-5 py-3 ${msg.sender_role === 'admin'
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-[#2C2C2E] text-gray-200 rounded-bl-none'
+                                        ? 'bg-blue-600 text-white rounded-br-none'
+                                        : 'bg-[#2C2C2E] text-gray-200 rounded-bl-none'
                                         }`}>
                                         <p className="text-sm">{msg.content}</p>
                                         <div className="text-[10px] opacity-50 mt-1 flex justify-end gap-1 items-center">
