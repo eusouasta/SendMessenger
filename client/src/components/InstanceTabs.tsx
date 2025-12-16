@@ -46,6 +46,8 @@ export default function InstanceTabs({ activeInstance, instances, onSelect, onAd
         }
       } else if (message.includes('not available')) {
         alert('Você já está na versão mais recente!');
+      } else if (message.includes('Error')) {
+        alert('Erro ao verificar: ' + message);
       }
     };
 
