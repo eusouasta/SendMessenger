@@ -10,6 +10,7 @@ import ClientLogin from './pages/Client/Login';
 import ClientDashboard from './pages/Client/Dashboard';
 import AdminLogin from './pages/Admin/Login';
 import AdminDashboard from './pages/Admin/Dashboard';
+import AdminChatPanel from './components/AdminChatPanel';
 
 function AppRoutes() {
     const [session, setSession] = useState<any>(null);
@@ -79,6 +80,10 @@ function AppRoutes() {
             <Route
                 path="/admin-panel"
                 element={isAdmin ? <AdminDashboard session={null} onLogout={handleAdminLogout} /> : <Navigate to="/admin" />}
+            />
+            <Route
+                path="/admin-panel/chat"
+                element={isAdmin ? <AdminChatPanel /> : <Navigate to="/admin" />}
             />
         </Routes>
     );

@@ -1,8 +1,10 @@
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Send, Zap } from 'lucide-react';
 import InstanceTabs from './components/InstanceTabs';
 import InstanceView from './components/InstanceView';
+import SupportChatWidget from './components/SupportChatWidget';
 
 function App() {
   const [hasLicense, setHasLicense] = useState<boolean>(false);
@@ -126,6 +128,7 @@ function App() {
           </div>
         ))}
       </div>
+      <SupportChatWidget />
     </div>
   );
 }
