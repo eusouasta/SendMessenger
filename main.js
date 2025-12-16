@@ -39,35 +39,25 @@ function createWindow() {
     }, 1500); // Give Express a moment to bind
 
     // Auto Updater Events
+    // Auto Updater Events
     autoUpdater.on('checking-for-update', () => {
-        win.webContents.send('update_status', 'Checking for update...');
+        win.webContents.send('update_status', { type: 'checking' });
     });
     autoUpdater.on('update-available', (info) => {
-        win.webContents.send('update_status', 'Update available.');
+        win.webContents.send('update_status', { type: 'available', payload: info });
     });
     autoUpdater.on('update-not-available', (info) => {
-        win.webContents.send('update_status', 'Update not available.');
+        win.webContents.send('update_status', { type: 'not-available', payload: info });
     });
     autoUpdater.on('error', (err) => {
-        win.webContents.send('update_status', 'Error in auto-updater. ' + err);
+        win.webContents.send('update_status', { type: 'error', payload: err.toString() });
     });
     autoUpdater.on('download-progress', (progressObj) => {
-        let log_message = "Download speed: " + progressObj.bytesPerSecond;
-        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-        win.webContents.send('update_status', log_message);
+        // Send the full progress object
+        win.webContents.send('update_status', { type: 'downloading', payload: progressObj });
     });
     autoUpdater.on('update-downloaded', (info) => {
-        win.webContents.send('update_status', 'Update downloaded');
-        // Optional: Ask user to restart
-        // dialog.showMessageBox({
-        //   type: 'info',
-        //   title: 'Update Ready',
-        //   message: 'Install and restart now?',
-        //   buttons: ['Yes', 'Later']
-        // }).then((buttonIndex) => {
-        //   if (buttonIndex.response === 0) autoUpdater.quitAndInstall(false, true);
-        // });
+        win.webContents.send('update_status', { type: 'downloaded', payload: info });
     });
 
     // Validar check updates once window is ready
@@ -170,3 +160,4 @@ if (!gotTheLock) {
             // We do NOT quit here anymore, user must use Tray -> Encerrar
         }
     });
+}
