@@ -53,10 +53,6 @@ export default function InstanceTabs({ activeInstance, instances, onSelect, onAd
 
       if (data.type === 'not-available' || data.type === 'error') {
         setChecking(false);
-        if (data.type === 'not-available') {
-          alert('Você já está na versão mais recente!');
-          setUpdateStatus({ type: 'idle' });
-        }
       } else if (data.type === 'downloaded') {
         setChecking(false);
       }

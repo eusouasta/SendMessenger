@@ -10,7 +10,7 @@ interface UpdateModalProps {
 }
 
 export default function UpdateModal({ status, onClose, onRestart }: UpdateModalProps) {
-    if (status.type === 'idle' || status.type === 'not-available') return null;
+    if (status.type === 'idle') return null;
 
     // Calculate progress percentage safely
     const percent = status.type === 'downloading' && status.payload ? Math.round(status.payload.percent) : 0;
@@ -34,7 +34,7 @@ export default function UpdateModal({ status, onClose, onRestart }: UpdateModalP
                             <RefreshCw className={`w-5 h-5 ${status.type === 'checking' || status.type === 'downloading' ? 'animate-spin' : ''}`} />
                             Atualização do Sistema
                         </h3>
-                        {(status.type === 'error' || status.type === 'downloaded' || status.type === 'checked') && (
+                        {(status.type === 'error' || status.type === 'downloaded' || status.type === 'not-available') && (
                             <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
                                 <X size={20} />
                             </button>
@@ -48,6 +48,16 @@ export default function UpdateModal({ status, onClose, onRestart }: UpdateModalP
                             <div className="text-gray-300 flex flex-col items-center py-4">
                                 <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
                                 <p>Verificando se há atualizações...</p>
+                            </div>
+                        )}
+
+                        {status.type === 'not-available' && (
+                            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex flex-col items-center text-center">
+                                <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-500 mb-3">
+                                    <CheckCircle size={24} />
+                                </div>
+                                <h4 className="text-blue-400 font-bold mb-1">Sistema Atualizado!</h4>
+                                <p className="text-gray-400 text-sm">Você já está utilizando a versão mais recente.</p>
                             </div>
                         )}
 
